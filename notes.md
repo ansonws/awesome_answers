@@ -16,7 +16,7 @@ This creates rails project
 
 Set database names in testing in config/database.yml
 Create database: "rails db:create" || "psql -d dbname"
-Start server: "rails server" || "rails s"  
+Start server: "rails server" || "rails s"  || bin/rails s
 When starting: Rails 5.2.3 application starting in development => mode of development
 
 Environments: if no default given, rails assumes dev environment
@@ -47,6 +47,7 @@ Router chooses controller, manages flow
 View generates the html, css, js
 
 rails g controller welcome || rails generate controller welcome
+<!-- rails g scaffold "model" attr:data_type -->
 rails d controller welcome || rails destroy controller welcome
 
 ```create  app/controllers/welcome_controller.rb
@@ -79,3 +80,74 @@ In app/controllers/views/layouts, we get default layouts and our html is injecte
 
 use url for external links, path for locally
 
+ActiveRecord is our ORM
+Each ActiveRecord object has CRUD functionality and it allows us to interact with our database
+
+Models are Ruby classes that we perform the logic with our database, sends it back to the controller. They inherit from ActiveRecord.
+
+Model names singular. Controller names plural.
+
+To generate a model run:
+rails g model "model_name" table_column:datatype 
+default datatype is string
+
+To generate a model do rails g model <model-name> <...column-name:type...>
+To run all your remaining migrations do: 
+> rails db:migrate:status or db:migrate if schema doesn't exist
+* Before you run db:migrate, you should inspect the file first*
+
+Don't change the schema file. If you need to make a change, rollback by running:
+> rails db:rollback(# of migrations to rollback)
+
+Or even better, run a new migration:
+rails g migration add_<migration-name e.g. "add_view_count_to_questions"> <column-name:datatype>
+Delete column(s):
+rails g migration remove_<migration-name e.g. "add_view_count_to_questions"> <column-name:datatype>
+
+Our DB tables are classes, located in app/models
+<table_class>.new instaniates
+e.g. q = Question.new title: "Will this work?", body: "Seriously, will this work?"
+
+q.persisted? => checks if object is in table/class
+q.save => saves to the db and returns true
+q.destroy
+
+.create => creates and saves in one command
+.all returns an ActiveRecord_Relation
+
+A relation will only get executed if it's necessary
+
+Query examples:
+* Question.first / Question.last
+* Question.first/second.third etc.
+* Question.all.select { |q| q.title === "What are we doing?" }
+* Question.select(:id, :title)
+* Question.find(<id>)
+* Question.find_by(title: "What are we doing?")
+* Question.find_by_title("What are we doing?") # Metaprogramming, rails generates this method for us
+    * find and find_by only returns the first record that matches the argument, returning an ActiveRecord_Object
+* Question.where(title: "What are we doing?") # returns an ActiveRecord_Relation
+    * Question.where(SQL QUERY) also works
+    * Question.where "title ILIKE #{params[:title]}" # Beware of SQL injection
+* Question.order "created_at DESC"
+* q.update(title: "What aren't we doing?", body: "Help")
+* q.destroy / q.delete # .destroy runs callbacks
+* Question.count # SELECT COUNT(*) FROM "questions"
+
+Add faker gem to Gemfile
+> bundle
+In db/seeds.rb, first you should delete:
+Question.delete_all
+
+Run seed
+rails db:seed
+
+Validations:
+In question.rb file, create validation
+e.g. validates(:title, presence: true)
+
+.save will only work if validated
+.valid?
+.errors.full_message
+
+Changing error messages
