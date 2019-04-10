@@ -9,7 +9,7 @@
 Question.delete_all
 
 200.times do
-    created_at = Faker::Date.backward(365 * 5)
+    created_at = Faker::Date.backwards(365 * 5)
     Question.create(
         # Faker is a ruby module. We are just accessing the class Hacker inside the module Faker
         title: Faker::Hacker.say_something_smart,

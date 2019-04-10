@@ -8,15 +8,22 @@ class Question < ApplicationRecord
     # Create validations by using the 'validates' method. The arguments are (in order):
     # - A column name as a symbol
     # - Named arguments, corresponding to the validation rules
-    validates :title, presence: true, uniqueness: true
-    validates 
+    validates(
+        :title, 
+        presence: true, 
+        uniqueness: true
+    )
+        
+    validates(
         :body, 
         presence: { message: "Must exist" },
         length: { minimum: 10 }
+    )
 
-    validates
+    validates(
         :view_count, 
         numericality: { greater_than_or_equal_to: 0 }
+    )
 
     # Custom Validation
     # Be careful, the method for custom validators is singular and it's almost identical to the same method for regular validations

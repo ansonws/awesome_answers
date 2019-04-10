@@ -93,7 +93,7 @@ default datatype is string
 
 To generate a model do rails g model <model-name> <...column-name:type...>
 To run all your remaining migrations do: 
-> rails db:migrate:status or db:migrate if schema doesn't exist
+> rails db:migrate:status or rails db:migrate if schema doesn't exist
 * Before you run db:migrate, you should inspect the file first*
 
 Don't change the schema file. If you need to make a change, rollback by running:
@@ -151,3 +151,8 @@ e.g. validates(:title, presence: true)
 .errors.full_message
 
 Changing error messages
+
+Create wireframes:
+rails g controller --no-helper --no-assets
+Make route. as: 'name'
+View name in rails/info/routes, or /anyroutethatdoesn'texist
