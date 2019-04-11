@@ -156,3 +156,12 @@ Create wireframes:
 rails g controller --no-helper --no-assets
 Make route. as: 'name'
 View name in rails/info/routes, or /anyroutethatdoesn'texist
+
+One to Many: 
+
+rails g model answer body:text question:references 
+
+rails g controller answers --skip-template-engine
+
+new action is for displaying forms in questions
+create action saves to the db
