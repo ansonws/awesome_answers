@@ -1,4 +1,5 @@
 class Question < ApplicationRecord
+    belongs_to :user
     # This is the Question model. We generate this file with the command:
     # > rails generate model question title:string body:text
     # This command also generates a migration file in db/migrate

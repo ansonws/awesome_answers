@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
+  resources :users, only: [:new, :create]
+  # resource is singular instead of resources
+  # Unlike resources, resource will create routes that do CRUD operation on only one thing.
+  # There will be no index routes and no routes will have an :id wildcard. 
+  # When using a singular resource, the controller name must still be plural.
+  resource :session, only: [:new, :create, :destroy]
   # resources method will generate all CRUD routes following RESTful conventions for a resource. 
   # It will assume there is a controller named after the first argument pluralized and PascalCased.
   # i.e. :question => QuestionsControllers

@@ -165,3 +165,29 @@ rails g controller answers --skip-template-engine
 
 new action is for displaying forms in questions
 create action saves to the db
+
+Authentication:
+rails g model user first_name last_name email password_digest
+Add email uniqueness, index and format to migration
+rails db:migrate
+
+install bcrypt and bundle
+bcrypt hashes and salts password
+salt is an additional string of data that adds to password
+
+Add has_secure_password method to user model
+
+rails g controller users
+Create sign up form
+New and create actions in users controller
+Add resource :users in routes
+
+rails g controller sessions
+All we're really using this controller for is for signing in/out
+
+rails g migration add_user_references_to_question user:references
+rails g migration add_user_references_to_answer user:references
+
+belongs_to gets put into model automatically when generated, but you'll have to add it yourself if you've already created it 
+
+set @question.user and @answer.user

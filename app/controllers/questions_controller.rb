@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
     # Order matters for before_action
+    before_action :authenticate_user!, except: [:index, :show]
     before_action :find_question, only: [:show, :edit, :update, :destroy]
 
     def new
@@ -8,6 +9,7 @@ class QuestionsController < ApplicationController
 
     def create
         @question = Question.new question_params
+        @question.user = current_user
         if @question.save
             # The redirect_to method is used for telling the browser to make a new request.
             # The redirect_to method is typically used with a named route helper.
