@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
     # Order matters for before_action
     before_action :authenticate_user!, except: [:index, :show]
     before_action :find_question, only: [:show, :edit, :update, :destroy]
+    before_action :authorize, only: [:edit, :update, :destroy]
 
     def new
         @question = Question.new
@@ -31,6 +32,10 @@ class QuestionsController < ApplicationController
     end
     
     def edit
+        # if @question.user != current_user
+        unless can? :edit, @question
+            redirect_to root_path, alert: 'Not authorized'
+        end
     end
     
     def update
@@ -57,6 +62,10 @@ class QuestionsController < ApplicationController
 
     def find_question
         @question = Question.find(params[:id])
+    end
+
+    def authorize
+        redirect_to root_path, alert: 'Not Authorized' unless can? :crud, @question
     end
 
 end

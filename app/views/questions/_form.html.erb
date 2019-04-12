@@ -5,7 +5,7 @@
     - A block that is passed the form object, where we build the HTML inside the form (i.e. labels, inputs, submission buttons, etc.)
 
     All data from the input fields a form built with this will have its name-value nested in a hash named after the class if the passed in model
-    e.g. <input type="text" name="question[title]" id="question_title"> => {"question": {"title": "What?" } }
+    e.g. <input type="text" name="question[title]" id="question_title"> => { "question": {"title": "What?" } }
 %>
 <%= form_with(model: @question, local: true) do |form| %>
 <% if @question.errors.present? %>

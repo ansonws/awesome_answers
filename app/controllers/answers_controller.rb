@@ -17,8 +17,13 @@ class AnswersController < ApplicationController
 
     def destroy
         @answer = Answer.find(params[:id])
-        @answer.destroy
-        redirect_to question_path(@answer.question)
+        if can? :crud, @answer
+            @answer.destroy
+            redirect_to question_path(@answer.question)
+        else
+            # head will send an empty HTTP response with a particular response code in this case :unauthorized code is 401
+            head :unauthorized
+        end
     end
 
     private

@@ -18,18 +18,20 @@
     </small>
 </div>
 
-<div>
-    <small>
-        <%= link_to "Edit", edit_question_path(@question) %>
-    </small>
-    <small>
-        <%= 
-            link_to(
-            "Delete", question_path(@question), method: :delete, data: { confirm: "Are you sure?" } 
-            ) 
-        %>
-    </small>
-</div>
+<% if can? :crud, @question %>
+    <div>
+        <small>
+            <%= link_to "Edit", edit_question_path(@question) %>
+        </small>
+        <small>
+            <%= 
+                link_to(
+                "Delete", question_path(@question), method: :delete, data: { confirm: "Are you sure?" } 
+                ) 
+            %>
+        </small>
+    </div>  
+<% end %>
 
 <section>
     <h1>Answers</h1>
@@ -60,6 +62,7 @@
             <li>
                 <p>
                     <%= answer.body %><br>
+                    <% if can? :crud, answer%>
                     <small>
                         <%= 
                             link_to(
@@ -71,6 +74,7 @@
                             ) 
                         %>
                     </small>
+                    <% end %>
                     <small>
                         Answered <%= time_ago_in_words(answer.created_at) %> ago
                     </small>

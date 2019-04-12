@@ -191,3 +191,25 @@ rails g migration add_user_references_to_answer user:references
 belongs_to gets put into model automatically when generated, but you'll have to add it yourself if you've already created it 
 
 set @question.user and @answer.user
+
+Authentication
+
+It's generally better to compare objects rather than ids
+
+Protect at the controller level and views level
+
+rails g cancan:ability
+
+user.id # undefined local variable or method 'user' 
+defined?(user) && user.id # returns nil
+user ||= User.new 
+
+rails g migration add_is_admin_to_users is_admin:boolean
+In migration file, make default: false
+
+user.update is_admin: true
+
+assets pipeline reduces http overhead buy not needed as many requests to be made
+
+in app.js include libraries, and then own files afterwards
+gem 'jquery-rails'
