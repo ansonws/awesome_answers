@@ -29,12 +29,14 @@
       |
       <%= link_to "Sign Up", new_user_path %>
     <% end %>
-    <hr>
-    <% flash.each do |type, message| %>
-      <div class="flash flash-<%= type %>">
-        <%= message %>
-      </div>
-    <% end %>
-    <%= yield %>
+    <div class="container">
+      <hr>
+      <% flash.each do |type, message| %>
+        <div class="flash flash-<%= type %>">
+          <%= message %>
+        </div>
+      <% end %>
+      <%= yield %>    
+    </div>
   </body>
 </html>

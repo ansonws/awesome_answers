@@ -70,6 +70,7 @@ end
 
 In welcome_controller.rb, define index method. These are index actions.
 Render templates in app/controllers/views/welcome
+<%= render 'path_to_partial', obj: >
 
 routes are in config/routes.rb
 We keep the routes in seperate files
@@ -146,6 +147,9 @@ Validations:
 In question.rb file, create validation
 e.g. validates(:title, presence: true)
 
+Set downcase:
+before_save { self.email = email.downcase }
+
 .save will only work if validated
 .valid?
 .errors.full_message
@@ -156,6 +160,7 @@ Create wireframes:
 rails g controller --no-helper --no-assets
 Make route. as: 'name'
 View name in rails/info/routes, or /anyroutethatdoesn'texist
+partials can use: f.submit @user.new_record? ? "Sign up" : "Update acount"
 
 One to Many: 
 
@@ -213,3 +218,25 @@ assets pipeline reduces http overhead buy not needed as many requests to be made
 
 in app.js include libraries, and then own files afterwards
 gem 'jquery-rails'
+
+Heroku commands:
+brew tap heroku/brew && brew install heroku
+heroku create awesome-answers
+git remote -v
+git push heroku master
+heroku run rails db:migrate db:seed
+heroku log --tail
+heroku run console
+heroku restart
+
+TESTING:
+
+* Define tests by creating a .rb file with require "minitest/autorun"
+* Create a class with a name that end in test, inheriting from MiniTest::Test
+Get more info 
+
+Add gem 'rspec-rails' to Gemfile group :dev :test 
+bundle
+rails g rspec:install
+rails g model job_post title description:text min_salary:integer company_name
+check migration file and migrate
