@@ -1,4 +1,7 @@
 class Question < ApplicationRecord
+    has_many :likes, dependent: :destroy
+    has_many :likers, through: :likes, source: :user
+
     belongs_to :user
     # This is the Question model. We generate this file with the command:
     # > rails generate model question title:string body:text
@@ -36,10 +39,11 @@ class Question < ApplicationRecord
     # - Named arguments, corresponding to the validation rules
 
     # To read more on validations: https://guides.rubyonrails.org/active_record_validations.html
+    
     validates(
-        :title, 
-        presence: true, 
-        uniqueness: true
+        :title, # Column Name
+        presence: true, # Validation
+        uniqueness: true # Validation
     )
         
     validates(

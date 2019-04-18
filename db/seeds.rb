@@ -7,8 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 PASSWORD = "supersecret"
 
+JobPost.delete_all
+Like.delete_all
 Answer.delete_all
 Question.delete_all
+User.delete_all
 # Question.destroy_all
 
 super_user = User.create(
@@ -50,6 +53,7 @@ users = User.all
                 user: users.sample
             )
         end
+        q.likers = User.all.shuffle.slice(0, rand(User.count))
     end
 end
 

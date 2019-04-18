@@ -240,3 +240,104 @@ bundle
 rails g rspec:install
 rails g model job_post title description:text min_salary:integer company_name
 check migration file and migrate
+
+rails db:drop db:create db:migrate db:seed
+
+Use different port: rails s -p <port#>
+
+Hide reviews stretch:
+add_column :reviews, :hidden. :boolean, default: false
+
+patch "/reviews/:id/toggle" => "reviews#toggle_hidden", as: "toggle_hidden"
+
+To run test manually:
+rspec sepc/models/job_post_spec.rb
+
+RSpec with Rails controllers
+To generate rspec for existing controller:
+rails g rspec:controller <controller-name>
+
+testdb gets reset with every test
+
+rails c
+FactoryBot.attributes_for :job_post
+might need spring stop
+FactoryBot.build
+FactoryBot.create
+
+rails g migration add_user_references_to_job_posts user:references
+
+cancan review:
+ability.rb file is used to define who can do what to which object
+
+Delete vs. Destroy
+HTTP verbs vs. CRUD Names
+
+| HTTP VERBS | CRUD (Rails Controller Action Names) |
+|------------|--------------------------------------|
+| GET        | Read (Show, Index, New, Edit)        |
+| POST       | Create (Create)                      |
+| DELETE     | Delete (Destroy)                     |
+| PATCH      | Update (Update)                      |
+| PUT        | Update (Update)                      |
+|---------------------------------------------------|
+
+Steps to Setup Authentication
+
+1. Create a User table (model) with a minimum of a `email` and `password_digest` columns.
+2. Add `has_secure_password` to the User model.
+3. Create a `UserController` to support creating users. This is for the  Sign Up page.
+4. Create a `SessionController` to support the Sign In page and the Sign Out.
+5. When a user Signs Up or Signs In, set their `user_id` in the `session` hash in `users#create` and `session#create`.
+6. In `ApplicationController`, implement the `current_user` to get the user from the `user_id` in the `session`.
+7. Implement the `authenticate_user!` method in the `ApplicationController`. This method is used with `before_action` in our controllters to prevent users that are not signed from accessing certain routes. 
+For example:
+`before_action :authenticate_user!, only: [:create]`
+8. Use `before_action :authenticate_user!` where appropriate or where you need to restrict user access to your actions.
+
+Lab: Test Drive New and Create with Users
+rails g migration add_user_references_to_news_article user:references
+rails db:migrate    
+rails g factory_bot:model user
+
+Many to many:
+rails g model like user:references question:references
+rails db:migrate
+
+rails c
+l = like.new(user: User.all.sample, question: Question.all.sample)
+install gem 'hirb' in group :development
+code ~/.pryrc
+
+In user model has_many :likes, dependent: :destroy
+has_many :liked_questions, through: :likes, source: :question
+
+In question model has_many :likes, dependent: :destroy
+
+u.liked_questions << Question.all.sample
+
+Validation in Like model
+validates :question_id, uniqueness: { scope: :user_id }
+
+Go to show page to add like link
+<%= link_to 'Like', question_likes_path(@question), method: :post %>
+<%= pluralize(@question.likes.count, "like") %>
+
+nest this route inside questions:
+resources :likes, only: [:create, :destroy]
+
+Generate likes controller
+In create action, we don't need instance variables because we don't need to pass likes to views
+
+To display like/unlike, go to question controller:
+@like = @question.likes.find_by(user: current_user)
+In show view: if @like.present?
+in 'unlike, singular like in path, pass in @like as second argument
+
+define destroy in likes controller
+
+User.all.shuffle.slice(0, rand(User.count))
+
+authenicate_user! in likes_controller
+ability to like 
+edit show page

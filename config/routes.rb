@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :job_posts, only: [:new, :create, :show, :destroy]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :users, only: [:new, :create]
   # resource is singular instead of resources
@@ -10,8 +11,9 @@ Rails.application.routes.draw do
   # It will assume there is a controller named after the first argument pluralized and PascalCased.
   # i.e. :question => QuestionsControllers
   resources :questions do 
-    # Routes written inside of a block passed to a 'resources' method will be pre-fixed by a path corresponding to the passed in symbol. 
-    # In this case all nested routes will be prefixed with '/question/:question_id/'
+  # Routes written inside of a block passed to a 'resources' method will be pre-fixed by a path corresponding to the passed in symbol. 
+  # In this case all nested routes will be prefixed with '/question/:question_id/'
+    resources :likes, only: [:create, :destroy]
     resources :answers, only: [:create, :destroy]
   end
   # get('/questions/new', to: 'questions#new', as: :new_question)
@@ -24,8 +26,8 @@ Rails.application.routes.draw do
   # delete('/questions/:id', to: 'questions#destroy')
   # get('/questions', to: 'questions#index')
 
-  post('/contacts', to: 'contact#create' )
-  get('/contacts/new', to: 'contact#new' )
+  post( '/contacts', to: 'contact#create' )
+  get( '/contacts/new', to: 'contact#new' )
 
   # this defines a `route` rule that says when we recieve a `GET` request with URL `/`, handle it using the `WelcomeController` with `index` action inside that controller
   # The `as` option is used for helper url/path, it overrides or generates helper method that you can use in your views or controllers

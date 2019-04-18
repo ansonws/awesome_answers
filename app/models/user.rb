@@ -1,6 +1,18 @@
 class User < ApplicationRecord
+    has_many :likes, dependent: :destroy
+    #          ð
+    #          \--------------------------\
+    #                                     ð
+    has_many :liked_questions, through: :likes, source: :question
+    # `has_many` can take a `through` named argument to create a many-to-many relationship via another `has_many` declaration.
+
+    # We specify the name of another `has_many` with the `through` option which corresponds to the join table between the two tables that share the many-to-many relationship.
+
+    # We must also provide a `source` named argument to specify which model we're getting back from the many-to-many relationship.
+
     has_many :questions, dependent: :nullify
     has_many :answers, dependent: :nullify
+    has_many :job_posts, dependent: :nullify
     has_secure_password
     # Provides user authentication features on the model that it is called in. 
     # It requires a column named 'password_digest' and the gem 'bcrypt'

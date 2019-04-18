@@ -18,11 +18,36 @@
     </small>
 </div>
 
+<div>
+    <% if can?(:like, @question) %>
+        <% unless @like.present? %>
+        <small>
+            <%= 
+                link_to 'Like', 
+                question_likes_path(@question),
+                method: :post
+            %>
+        </small>
+        <% else %>
+        <small>
+            <%= 
+                link_to 'Unlike', 
+                question_like_path(@question, @like),
+                method: :delete
+            %>
+        </small>
+        <% end %>
+    <% end %>
+    <small>
+        <%= pluralize(@question.likes.count, "like") %>
+    </small>
+</div>
 <% if can? :crud, @question %>
     <div>
         <small>
             <%= link_to "Edit", edit_question_path(@question) %>
         </small>
+        |
         <small>
             <%= 
                 link_to(
