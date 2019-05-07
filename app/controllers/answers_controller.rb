@@ -7,6 +7,9 @@ class AnswersController < ApplicationController
         @answer.user = current_user
 
         if @answer.save
+            # Notify question creator that they got a reply using email
+            # AnswerMailer.new_answer(@answer).deliver_now
+            AnswerMailer.new_answer(@answer).deliver_now
             redirect_to question_path @question
         else
             # For the list of answers

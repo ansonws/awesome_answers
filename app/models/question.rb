@@ -1,6 +1,11 @@
 class Question < ApplicationRecord
     has_many :likes, dependent: :destroy
     has_many :likers, through: :likes, source: :user
+    has_many :taggings, dependent: :destroy
+    has_many :tags, through: :taggings #, source: :tag
+    # If the name of the association (i.e. tags) is the
+    # same as the source singularized (i.e. tag), the source
+    # named argument can be omitted. 
 
     belongs_to :user
     # This is the Question model. We generate this file with the command:
@@ -69,7 +74,7 @@ class Question < ApplicationRecord
     scope :recent, -> { order(created_at: :desc).limit(10) }
     # Scopes are such a commonly used feature that there is a way to create them quicker. It takes a name and a lambda as a callback.
     # is equivalent to:
-    # def self.recent
+    # def self.rece777nt
     #     order(created_at: :desc).limit(10)
     # end
 
@@ -78,7 +83,7 @@ class Question < ApplicationRecord
     private
     
     def no_monkey
-        # $. is the safe navigation operator. It's used like the . operator to call methods on an object.
+        # &. is the safe navigation operator. It's used like the . operator to call methods on an object.
         # If the method doesn't exist for the object, 'nil' will be returned instead of getting an error.
         if body&.downcase&.include?("monkey")
             # To make a record invalid, you must add a validation error using the errors `add` method.

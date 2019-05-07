@@ -341,3 +341,116 @@ User.all.shuffle.slice(0, rand(User.count))
 authenicate_user! in likes_controller
 ability to like 
 edit show page
+
+Mailers
+rails g mailer answer_mailer
+This generates mailer, views for email body, and specs for testing 
+
+ApplicationMailer < ActionMailer::Base
+
+You can only send one file in an email, no external css and js files
+
+mail(to: from: e.g.)
+methods in Mailer class are class methods even though it looks like a regular method
+
+rails c     
+AnswerMailer.hello_world.deliver_now
+AnswerMailer.new_answer(Answer.last).deliver_now
+
+
+add gem 'letter_opener'
+
+Open config/environments/development.rb
+
+Add:
+config.action_mailer.delivery_method = :letter_opener
+config.action_mailer.perform_deliveries = true
+config.action_mailer.default_url_options = {
+    host: "localhost:3000"
+}
+
+set this to true:
+config.action_mailer.raise_delivery_errors = false
+
+Background jobs:
+Add gems:
+gem 'delayed_job_active_record'
+gem 'delayed_job_web'
+# Reduces boot times through caching; required in config/boot.rb
+
+in config/application.rb:
+config active_job queue_adapter = :delayed_job
+
+To generate the migration for "delayed_job"'s queue, run:
+rails g delayed_job:active_record
+
+To generate a job file, run:
+rails g job <job-name>
+
+rails c
+HelloWorldJob.perform_later
+HelloWorldJob.set(wait: 10.seconds).perform_later
+HelloWorldJob.set(wait: 10.years).perform_later
+
+Open new terminal tab and generate worker:
+rails jobs:work
+
+Unlike mailers, you need a seperate class for each job
+
+HTTP API
+
+In questions controller:
+respond_to do |format|
+    format.html { render }
+    format.json { render json: @question }
+end
+
+rails g controller api::v1::questions
+
+In routes:
+namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+        resources :question 
+    end
+end
+
+rails routes | grep api/v1
+
+brew cask install postman
+
+Add 'active_model_serializers' gem
+
+Generate serializer:
+rails g serializer question
+
+  attributes(
+    :id,
+    :first_name,
+    :last_name,
+    :full_name
+  )
+
+  Custom methods also work because table columns are methods too
+
+  Nested queries not included by default, so in api questions controller:
+  include: [:author, {answers: [:author] }]
+
+  Instead of self, use object to reference the instance that is being serialized
+
+  We use :symbols for methods because of .send()
+
+  Create a separate serializer just for index to avoid using the default question serializer and overfetching
+  while rendering index:
+  each_serializer: QuestionCollectionSerializer
+
+  for new action, don't need to render json for form
+
+  rails g controller api::application
+
+  Add to api controller:
+  skip_before_action(:verify_authenticity_token)
+
+  rails g controller api::v1::sessions
+  add resource for session in namespace v1
+
+  In general, don't use redirects for apis

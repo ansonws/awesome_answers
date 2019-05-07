@@ -22,6 +22,7 @@ module AwesomeAnswers
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
+    config.active_job.queue_adapter = :delayed_job
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
@@ -33,5 +34,19 @@ module AwesomeAnswers
       g.helper = false
       g.assets = false
     end
+
+    config.middleware.insert_before(0, Rack::Cors) do
+      allow do
+        # "origins" method specifies which domains are allowed to make AJAX requests to this server.
+        # '*' means all domains and should be avoided.
+        origins "*" 
+
+        resource(
+          "/api/*", # Only routes that begin with /api/ are accessible with AJAX
+          headers: :any, # Which HTTP headers can be sent in a request.
+          methods: [ :get, :post, :delete, :patch, :put, :option ] # Which HTTP verbs are allowed in a request.
+        )
+        end
+      end
   end
 end
